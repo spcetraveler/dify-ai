@@ -722,9 +722,12 @@ services:
     depends_on:
       - api
       - web
-    ports:
-      - '${EXPOSE_NGINX_PORT:-80}:${NGINX_PORT:-80}'
-      - '${EXPOSE_NGINX_SSL_PORT:-443}:${NGINX_SSL_PORT:-443}'
+    expose:
+      - '${EXPOSE_NGINX_PORT}'
+      
+    networks:
+      - default
+      - proxy_network
 
   # The Weaviate vector store.
   weaviate:
@@ -1117,6 +1120,9 @@ networks:
   opensearch-net:
     driver: bridge
     internal: true
+  proxy_network:
+    name: proxy_network
+    external: true
 
 volumes:
   oradata:
